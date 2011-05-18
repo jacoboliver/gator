@@ -3,7 +3,7 @@ var thrift	= require('thrift')
   , ttypes	= require('./gen-nodejs/Hbase_types')
   , dgram	= require('dgram')
   , sys		= require('sys')
-  , conf    = require('./configure');
+  , conf	= require('./configure');
 
 var counters = {};
 counters.total = 0;
