@@ -9,7 +9,7 @@
 	debug: 1,
 	categories:
 			{
-				plays:
+				play:
 					{
 						table: 'plays'
 					},

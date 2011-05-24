@@ -42,17 +42,23 @@ config.on('set', function (config,oldConfig) {
 	}
 	connection.on('error', function (err) { sys.error(err) });
 	
+	if (typeof flusher === 'undefined' || config.flushInt != oldConfig.flushInt) {
+		clearInterval(flusher);
+		flush();
+		flusher = setInterval(flush, config.flushInt);
+	}
+	
 	if (config.port != oldConfig.port && typeof server !== 'undefined') {
 		server.close();
 		server = undefined;
 	} else if (typeof server === 'undefined') {
 		server = dgram.createSocket('udp4', function (msg) {
-			var hit = JSON.parse(msg);			
+			var hit = JSON.parse(msg);	
 			var category = config.categories[hit.category];
 			if (!category) return;
+			
 			var table = category.table;
 			var keys = hit.keys.slice(0);
-			
 			while (keys.length) {
 				for (var interval in counters[table]) {
 					
@@ -71,13 +77,6 @@ config.on('set', function (config,oldConfig) {
 			}
 		}).bind(config.port);
 	}
-	
-	if (typeof flusher === 'undefined' || config.flushInt != oldConfig.flushInt) {
-		clearInterval(flusher);
-		flush();
-		flusher = setInterval(flush(), config.flushInt);
-	}
-	
 });
 
 var flush = function() {
@@ -99,14 +98,14 @@ var flush = function() {
 					client.atomicIncrement(table,key,column,flushers[table][interval][ts][key],function call(err,data) {
 						if (data) sys.log(data);
 						if (err) sys.log(err);
-						if (--categoryNum == 0) connection.end();
+						if (--counterNum == 0) connection.end();
 					});
 				}
 			}
     	}
 	}
 	connection.on('error', function (err) { sys.error(err) });
-}
+};
 
 var clone = function(oldObj) {
 	var newObj = (oldObj instanceof Array) ? [] : {};
