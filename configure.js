@@ -11,7 +11,7 @@ var Configure = function (file) {
 		fs.readFile(file, function (err, data) {
 			oldConfig = config;
 			config = require('vm').runInThisContext('config = ' + data, file);
-			self.emit('set', config,oldConfig);
+			self.emit('set', config, oldConfig);
 		});
 	}
 	
