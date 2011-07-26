@@ -1,0 +1,28 @@
+Gator
+======
+
+realtime analytics using Node.js and HBase 
+
+
+Setup
+--------
+
+	* start HBase (very difficult)
+	* start HBase Thrift server
+	* start Gator (with your own GatorConfig)
+	* send data to Gator!
+	
+Guts
+--------
+	* HBase stores data via key and columnFamily for every time interval (set via config)
+	* send data to Gator as json-encoded array via udp
+	* Gator communicates to HBase via thrift converts everything into the right key/columns
+	* rewrite gatorConfig and changes happen immediately without restart
+	
+
+ToDo
+--------
+	* overhaul the frontend server to be more robust
+	* add max and min to data collection
+	* send data to gator through Thrift service?
+	* take care of dropped packets with client side service
