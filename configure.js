@@ -7,7 +7,7 @@ var Configure = function (file) {
 	var config = {};
 	var oldConfig = {};
 	
-	this.read = function() {
+	read = function() {
 		fs.readFile(file, function (err, data) {
 			oldConfig = config;
 			config = require('vm').runInThisContext('config = ' + data, file);
@@ -15,10 +15,10 @@ var Configure = function (file) {
 		});
 	}
 	
-	this.read();
+	read();
 	
 	fs.watchFile(file, function (curr, prev) {
-		if (curr.mtime.toString() != prev.mtime.toString()) { self.read() }
+		if (curr.mtime.toString() != prev.mtime.toString()) { read() }
 	});
 	
 }
